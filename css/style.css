@@ -1,0 +1,19 @@
+/* Remove margens padrão e oculta barras de rolagem */
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Centraliza o canvas do Phaser */
+canvas {
+  display: block;
+  border: 3px solid #333;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+}
