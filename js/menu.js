@@ -74,6 +74,10 @@ class MenuScene extends Phaser.Scene {
         
         // Variável para controlar música
         this.isMusicOn = true;
+        const savedMusicState = localStorage.getItem("musicEnabled");
+        if (savedMusicState !== null) {
+        this.isMusicOn = savedMusicState === "true";
+}
         this.backgroundMusic = null;
         
         // Botão PLAY
@@ -100,23 +104,30 @@ class MenuScene extends Phaser.Scene {
         
         // Iniciar música
         this.backgroundMusic = this.sound.add('menuMusic', { loop: true, volume: 0.5 });
-        this.backgroundMusic.play();
+        this.backgroundMusic = this.sound.add('menuMusic', { loop: true, volume: 0.5 });
+        if (this.isMusicOn) {
+            this.backgroundMusic.play();
+            console.log('♪ Música iniciada');
+        } else {
+            console.log('🔇 Música desativada (estado salvo)');
+        }
         console.log('♪ Música iniciada');
     }
     
     toggleMusic() {
-        this.isMusicOn = !this.isMusicOn;
-        
-        if (this.isMusicOn) {
-            this.backgroundMusic.resume();
-            this.musicButton.textObj.setText('🔊 MÚSICA ON');
-            console.log('✓ Música ligada');
-        } else {
-            this.backgroundMusic.pause();
-            this.musicButton.textObj.setText('🔇 MÚSICA OFF');
-            console.log('✓ Música desligada');
-        }
+    this.isMusicOn = !this.isMusicOn;
+    localStorage.setItem("musicEnabled", this.isMusicOn); // 🔁 Salva estado
+
+    if (this.isMusicOn) {
+        this.backgroundMusic.resume();
+        this.musicButton.textObj.setText('🔊 MÚSICA ON');
+        console.log('✓ Música ligada');
+    } else {
+        this.backgroundMusic.pause();
+        this.musicButton.textObj.setText('🔇 MÚSICA OFF');
+        console.log('✓ Música desligada');
     }
+}
     
     showOptionsMenu() {
         const centerX = this.cameras.main.centerX;
