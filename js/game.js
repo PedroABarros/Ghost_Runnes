@@ -27,9 +27,13 @@ let pauseMenu;
 const game = new Phaser.Game(config);
 
 function preload() {
-  // --- IMAGENS ---
+  // --- FUNDO ---
   this.load.image("sky", "assets/orig.png");
-  this.load.image("ground", "assets/platform.png");
+
+  // --- TILE DA PLATAFORMA (32x32) ---
+  this.load.image("tile", "assets/plat1.png");
+
+  // --- ESTRELAS E BOMBAS ---
   this.load.image("star", "assets/star.png");
   this.load.image("bomb", "assets/bomb.png");
 
@@ -48,17 +52,40 @@ function create() {
   const bg = this.add.image(400, 300, "sky");
   bg.setDisplaySize(this.sys.game.config.width, this.sys.game.config.height);
 
-  // --- PLATAFORMAS ---
+  // --- GRUPO DE PLATAFORMAS ---
   platforms = this.physics.add.staticGroup();
-  platforms.create(400, 568, "ground").setScale(2).refreshBody();
-  platforms.create(600, 400, "ground");
-  platforms.create(50, 250, "ground");
-  platforms.create(750, 220, "ground");
+
+  // =====================================
+  // PLATAFORMA PRINCIPAL (CHÃO)
+  // 25 blocos * 32 = 800px
+  // =====================================
+  for (let i = 0; i < 25; i++) {
+    platforms.create(i * 32, 568, "tile").setOrigin(0, 0).refreshBody();
+  }
+
+  // Plataforma 1
+  for (let i = 0; i < 7; i++) {
+    platforms.create(600 + i * 32, 400, "tile").setOrigin(0, 0).refreshBody();
+  }
+
+  // Plataforma 2
+  for (let i = 0; i < 7; i++) {
+    platforms.create(50 + i * 32, 250, "tile").setOrigin(0, 0).refreshBody();
+  }
+
+  // Plataforma 3
+  for (let i = 0; i < 7; i++) {
+    platforms.create(750 + i * 32, 220, "tile").setOrigin(0, 0).refreshBody();
+  }
 
   // --- PLAYER ---
   player = this.physics.add.sprite(100, 450, "dude");
   player.setBounce(0.2);
   player.setCollideWorldBounds(true);
+
+  // HITBOX AJUSTADA
+  player.setSize(40, 90);
+  player.setOffset(44, 30);
 
   // --- ANIMAÇÕES ---
   this.anims.create({
@@ -112,22 +139,15 @@ function create() {
   // --- MÚSICA ---
   backgroundMusic = this.sound.add("gameMusic", { loop: true, volume: 0.3 });
 
-// Verifica o estado global salvo
-const savedMusicState = localStorage.getItem("musicEnabled");
-const musicEnabled = savedMusicState === null ? true : savedMusicState === "true";
+  const savedMusicState = localStorage.getItem("musicEnabled");
+  const musicEnabled = savedMusicState === null ? true : savedMusicState === "true";
 
-if (musicEnabled) {
-    backgroundMusic.play();
-    console.log("♪ Música do jogo iniciada");
-} else {
-    console.log("🔇 Música do jogo desativada (estado salvo)");
-}
+  if (musicEnabled) backgroundMusic.play();
 
-  // --- MENU DE PAUSA (criado e invisível) ---
+  // --- MENU DE PAUSA ---
   pauseMenu = createPauseMenu(this);
   pauseMenu.setVisible(false);
 
-  // --- TECLA DE PAUSA ---
   this.input.keyboard.on("keydown-ESC", () => togglePause(this));
 }
 
@@ -135,11 +155,11 @@ function update() {
   if (gameOver || paused) return;
 
   if (cursors.left.isDown) {
-    player.setVelocityX(-160);
+    player.setVelocityX(-250); // mais rápido
     player.anims.play("left", true);
     player.flipX = true;
   } else if (cursors.right.isDown) {
-    player.setVelocityX(160);
+    player.setVelocityX(250); // mais rápido
     player.anims.play("right", true);
     player.flipX = false;
   } else {
@@ -148,7 +168,7 @@ function update() {
   }
 
   if (cursors.up.isDown && player.body.touching.down) {
-    player.setVelocityY(-330);
+    player.setVelocityY(-380); // pulo ajustado
   }
 }
 
@@ -186,7 +206,7 @@ function hitBomb(player, bomb) {
 }
 
 /* ===============================
-   FUNÇÕES DO MENU DE PAUSA
+   MENU DE PAUSA
    =============================== */
 
 function togglePause(scene) {
@@ -210,19 +230,15 @@ function createPauseMenu(scene) {
   const centerY = scene.cameras.main.centerY;
   const container = scene.add.container(centerX, centerY);
 
-  // Fundo
   const overlay = scene.add.rectangle(0, 0, 400, 300, 0x000000, 0.7);
   overlay.setStrokeStyle(3, 0xffc800);
 
-  // Título
   const title = scene.add
     .text(0, -100, "PAUSADO", { font: "bold 48px Arial", fill: "#ffc800" })
     .setOrigin(0.5);
 
-  // Botão CONTINUAR
   const resumeBtn = makeButton(scene, 0, -20, "Continuar", () => togglePause(scene));
 
-  // Botão SOM
   const soundBtn = makeButton(scene, 0, 50, "Som: ON", () => {
     if (backgroundMusic.isPlaying) {
       backgroundMusic.pause();
@@ -233,7 +249,6 @@ function createPauseMenu(scene) {
     }
   });
 
-  // Botão VOLTAR AO MENU
   const menuBtn = makeButton(scene, 0, 120, "Voltar ao Menu", () => {
     backgroundMusic.stop();
     window.location.href = "index.html";
@@ -245,7 +260,6 @@ function createPauseMenu(scene) {
   return container;
 }
 
-// --- Função auxiliar de botão ---
 function makeButton(scene, x, y, text, callback) {
   const btn = scene.add
     .text(x, y, text, {
