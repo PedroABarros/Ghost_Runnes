@@ -222,6 +222,56 @@ function hitBomb(player, bomb) {
   if (score > highScore) {
     localStorage.setItem("highScore", score);
   }
+  // --- BOTÃO DE REINICIAR (ESTILIZADO) ---
+const restartBtn = this.add.rectangle(
+  this.cameras.main.centerX,
+  this.cameras.main.centerY + 80,
+  260,
+  70,
+  0x1e1e1e,
+  0.85
+)
+.setStrokeStyle(4, 0xffffff)
+.setOrigin(0.5)
+.setInteractive({ useHandCursor: true });
+
+const restartText = this.add.text(
+  this.cameras.main.centerX,
+  this.cameras.main.centerY + 80,
+  "REINICIAR",
+  {
+    fontSize: "32px",
+    fontFamily: "Arial",
+    fontStyle: "bold",
+    color: "#ffffff",
+  }
+).setOrigin(0.5);
+
+// --- EFEITOS DE HOVER ---
+restartBtn.on("pointerover", () => {
+  restartBtn.setFillStyle(0x333333, 1);
+  restartBtn.setStrokeStyle(4, 0xffff00);
+  restartText.setColor("#ffff00");
+});
+
+restartBtn.on("pointerout", () => {
+  restartBtn.setFillStyle(0x1e1e1e, 0.85);
+  restartBtn.setStrokeStyle(4, 0xffffff);
+  restartText.setColor("#ffffff");
+});
+
+// --- CLIQUE PARA REINICIAR ---
+restartBtn.on("pointerdown", () => {
+  this.scene.restart();
+  score = 0;
+  gameOver = false;
+});
+restartText.on("pointerdown", () => {
+  this.scene.restart();
+  score = 0;
+  gameOver = false;
+});
+
 
 }
 
