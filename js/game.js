@@ -35,9 +35,9 @@ function preload() {
   // --- TILE DA PLATAFORMA (32x32) ---
   this.load.image("tile", "assets/plat1.png");
 
-  // --- ESTRELAS E BOMBAS ---
-  this.load.image("vela", "assets/velas.png");
-  this.load.image("bomb", "assets/icon23.png");
+  // --- velaS E BOMBAS ---
+  this.load.image("vela", "assets/vela.png");
+  this.load.image("bomb", "assets/ghost.png");
 
   // --- SPRITE DO PLAYER ---
   this.load.spritesheet("dude", "assets/player_run.png", {
@@ -179,7 +179,7 @@ function update() {
   }
 }
 
-// --- COLETAR ESTRELAS ---
+// --- COLETAR velaS ---
 function collectStar(player, star) {
   star.disableBody(true, true);
   score += 10;
