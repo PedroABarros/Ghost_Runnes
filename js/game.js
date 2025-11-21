@@ -36,8 +36,8 @@ function preload() {
   this.load.image("tile", "assets/plat1.png");
 
   // --- ESTRELAS E BOMBAS ---
-  this.load.image("star", "assets/star.png");
-  this.load.image("bomb", "assets/bomb.png");
+  this.load.image("vela", "assets/velas.png");
+  this.load.image("bomb", "assets/icon23.png");
 
   // --- SPRITE DO PLAYER ---
   this.load.spritesheet("dude", "assets/player_run.png", {
@@ -107,9 +107,9 @@ function create() {
   // --- CONTROLES ---
   cursors = this.input.keyboard.createCursorKeys();
 
-  // --- ESTRELAS ---
+  // --- VELAS ---
   stars = this.physics.add.group({
-    key: "star",
+    key: "vela",
     repeat: 11,
     setXY: { x: 12, y: 0, stepX: 70 },
   });
