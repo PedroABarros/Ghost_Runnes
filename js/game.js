@@ -23,6 +23,8 @@ let paused = false;
 let scoreText;
 let backgroundMusic;
 let pauseMenu;
+let highScore = 0;
+let highScoreText;
 
 const game = new Phaser.Game(config);
 
@@ -55,10 +57,6 @@ function create() {
   // --- GRUPO DE PLATAFORMAS ---
   platforms = this.physics.add.staticGroup();
 
-  // =====================================
-  // PLATAFORMA PRINCIPAL (CHÃO)
-  // 25 blocos * 32 = 800px
-  // =====================================
   for (let i = 0; i < 25; i++) {
     platforms.create(i * 32, 568, "tile").setOrigin(0, 0).refreshBody();
   }
@@ -129,6 +127,15 @@ function create() {
     fill: "#000",
   });
 
+  // --- HIGH SCORE ---
+  const savedHighScore = localStorage.getItem("highScore");
+  highScore = savedHighScore ? parseInt(savedHighScore) : 0;
+
+  highScoreText = this.add.text(16, 50, "Recorde: " + highScore, {
+    fontSize: "28px",
+    fill: "#000",
+  });
+
   // --- COLISÕES ---
   this.physics.add.collider(player, platforms);
   this.physics.add.collider(stars, platforms);
@@ -183,6 +190,14 @@ function collectStar(player, star) {
       child.enableBody(true, child.x, 0, true, true);
     });
 
+   // Atualiza recorde em tempo real
+  if (score > highScore) {
+    highScore = score;
+    highScoreText.setText("Recorde: " + highScore);
+    localStorage.setItem("highScore", highScore);
+  }
+ 
+
     const x =
       player.x < 400
         ? Phaser.Math.Between(400, 800)
@@ -203,6 +218,11 @@ function hitBomb(player, bomb) {
   player.anims.play("turn");
   gameOver = true;
   if (backgroundMusic && backgroundMusic.isPlaying) backgroundMusic.stop();
+  // Salva recorde final
+  if (score > highScore) {
+    localStorage.setItem("highScore", score);
+  }
+
 }
 
 /* ===============================
