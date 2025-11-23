@@ -46,7 +46,10 @@ function preload() {
   });
 
   // --- MÚSICA DO JOGO ---
-  this.load.audio("gameMusic", "musics/horror-background-atmosphere-06-199279.mp3");
+  this.load.audio(
+    "gameMusic",
+    "musics/horror-background-atmosphere-06-199279.mp3"
+  );
 }
 
 function create() {
@@ -58,22 +61,34 @@ function create() {
   platforms = this.physics.add.staticGroup();
 
   for (let i = 0; i < 25; i++) {
-    platforms.create(i * 32, 568, "tile").setOrigin(0, 0).refreshBody();
+    platforms
+      .create(i * 32, 568, "tile")
+      .setOrigin(0, 0)
+      .refreshBody();
   }
 
   // Plataforma 1
   for (let i = 0; i < 7; i++) {
-    platforms.create(600 + i * 32, 400, "tile").setOrigin(0, 0).refreshBody();
+    platforms
+      .create(600 + i * 32, 400, "tile")
+      .setOrigin(0, 0)
+      .refreshBody();
   }
 
   // Plataforma 2
   for (let i = 0; i < 7; i++) {
-    platforms.create(50 + i * 32, 250, "tile").setOrigin(0, 0).refreshBody();
+    platforms
+      .create(50 + i * 32, 250, "tile")
+      .setOrigin(0, 0)
+      .refreshBody();
   }
 
   // Plataforma 3
   for (let i = 0; i < 7; i++) {
-    platforms.create(750 + i * 32, 220, "tile").setOrigin(0, 0).refreshBody();
+    platforms
+      .create(750 + i * 32, 220, "tile")
+      .setOrigin(0, 0)
+      .refreshBody();
   }
 
   // --- PLAYER ---
@@ -147,7 +162,8 @@ function create() {
   backgroundMusic = this.sound.add("gameMusic", { loop: true, volume: 0.3 });
 
   const savedMusicState = localStorage.getItem("musicEnabled");
-  const musicEnabled = savedMusicState === null ? true : savedMusicState === "true";
+  const musicEnabled =
+    savedMusicState === null ? true : savedMusicState === "true";
 
   if (musicEnabled) backgroundMusic.play();
 
@@ -190,13 +206,12 @@ function collectStar(player, star) {
       child.enableBody(true, child.x, 0, true, true);
     });
 
-   // Atualiza recorde em tempo real
-  if (score > highScore) {
-    highScore = score;
-    highScoreText.setText("Recorde: " + highScore);
-    localStorage.setItem("highScore", highScore);
-  }
- 
+    // Atualiza recorde em tempo real
+    if (score > highScore) {
+      highScore = score;
+      highScoreText.setText("Recorde: " + highScore);
+      localStorage.setItem("highScore", highScore);
+    }
 
     const x =
       player.x < 400
@@ -223,56 +238,57 @@ function hitBomb(player, bomb) {
     localStorage.setItem("highScore", score);
   }
   // --- BOTÃO DE REINICIAR (ESTILIZADO) ---
-const restartBtn = this.add.rectangle(
-  this.cameras.main.centerX,
-  this.cameras.main.centerY + 80,
-  260,
-  70,
-  0x1e1e1e,
-  0.85
-)
-.setStrokeStyle(4, 0xffffff)
-.setOrigin(0.5)
-.setInteractive({ useHandCursor: true });
+  const restartBtn = this.add
+    .rectangle(
+      this.cameras.main.centerX,
+      this.cameras.main.centerY + 80,
+      260,
+      70,
+      0x1e1e1e,
+      0.85
+    )
+    .setStrokeStyle(4, 0xffffff)
+    .setOrigin(0.5)
+    .setInteractive({ useHandCursor: true });
 
-const restartText = this.add.text(
-  this.cameras.main.centerX,
-  this.cameras.main.centerY + 80,
-  "REINICIAR",
-  {
-    fontSize: "32px",
-    fontFamily: "Arial",
-    fontStyle: "bold",
-    color: "#ffffff",
-  }
-).setOrigin(0.5);
+  const restartText = this.add
+    .text(
+      this.cameras.main.centerX,
+      this.cameras.main.centerY + 80,
+      "REINICIAR",
+      {
+        fontSize: "32px",
+        fontFamily: "Arial",
+        fontStyle: "bold",
+        color: "#ffffff",
+      }
+    )
+    .setOrigin(0.5);
 
-// --- EFEITOS DE HOVER ---
-restartBtn.on("pointerover", () => {
-  restartBtn.setFillStyle(0x333333, 1);
-  restartBtn.setStrokeStyle(4, 0xffff00);
-  restartText.setColor("#ffff00");
-});
+  // --- EFEITOS DE HOVER ---
+  restartBtn.on("pointerover", () => {
+    restartBtn.setFillStyle(0x333333, 1);
+    restartBtn.setStrokeStyle(4, 0xffff00);
+    restartText.setColor("#ffff00");
+  });
 
-restartBtn.on("pointerout", () => {
-  restartBtn.setFillStyle(0x1e1e1e, 0.85);
-  restartBtn.setStrokeStyle(4, 0xffffff);
-  restartText.setColor("#ffffff");
-});
+  restartBtn.on("pointerout", () => {
+    restartBtn.setFillStyle(0x1e1e1e, 0.85);
+    restartBtn.setStrokeStyle(4, 0xffffff);
+    restartText.setColor("#ffffff");
+  });
 
-// --- CLIQUE PARA REINICIAR ---
-restartBtn.on("pointerdown", () => {
-  this.scene.restart();
-  score = 0;
-  gameOver = false;
-});
-restartText.on("pointerdown", () => {
-  this.scene.restart();
-  score = 0;
-  gameOver = false;
-});
-
-
+  // --- CLIQUE PARA REINICIAR ---
+  restartBtn.on("pointerdown", () => {
+    this.scene.restart();
+    score = 0;
+    gameOver = false;
+  });
+  restartText.on("pointerdown", () => {
+    this.scene.restart();
+    score = 0;
+    gameOver = false;
+  });
 }
 
 /* ===============================
@@ -307,17 +323,33 @@ function createPauseMenu(scene) {
     .text(0, -100, "PAUSADO", { font: "bold 48px Arial", fill: "#ffc800" })
     .setOrigin(0.5);
 
-  const resumeBtn = makeButton(scene, 0, -20, "Continuar", () => togglePause(scene));
+  const resumeBtn = makeButton(scene, 0, -20, "Continuar", () =>
+    togglePause(scene)
+  );
+  const musicEnabled = localStorage.getItem("musicEnabled") !== "false";
+  const soundBtn = makeButton(
+    scene,
+    0,
+    50,
+    "Som: " + (musicEnabled ? "ON" : "OFF"),
+    () => {
+      soundBtn.on("pointerdown", () => {
+        const enabled = localStorage.getItem("musicEnabled") !== "false";
 
-  const soundBtn = makeButton(scene, 0, 50, "Som: ON", () => {
-    if (backgroundMusic.isPlaying) {
-      backgroundMusic.pause();
-      soundBtn.setText("Som: OFF");
-    } else {
-      backgroundMusic.resume();
-      soundBtn.setText("Som: ON");
+        if (enabled) {
+          // Som estava ON → desligar
+          backgroundMusic.stop();
+          localStorage.setItem("musicEnabled", "false");
+          soundBtn.setText("Som: OFF");
+        } else {
+          // Som estava OFF → ligar
+          backgroundMusic.play({ loop: true }); // IMPORTANTE!
+          localStorage.setItem("musicEnabled", "true");
+          soundBtn.setText("Som: ON");
+        }
+      });
     }
-  });
+  );
 
   const menuBtn = makeButton(scene, 0, 120, "Voltar ao Menu", () => {
     backgroundMusic.stop();
